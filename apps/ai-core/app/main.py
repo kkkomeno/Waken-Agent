@@ -19,7 +19,7 @@ async def lifespan(app: FastAPI):
     from app.core.tools import register_all_tools
 
     register_all_tools()
-    print("[AI Core] All tools registered ✓")
+    print("[AI Core] All tools registered [OK]")
     yield
     # Shutdown
     print("[AI Core] Shutting down...")

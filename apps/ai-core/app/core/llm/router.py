@@ -33,31 +33,40 @@ class ModelRouter:
     """Routes tasks to the appropriate LLM based on complexity."""
 
     def __init__(self):
-        # Pre-instantiate commonly used models
         self._models: dict[str, BaseLLM] = {}
+
+    def _create_model(self, model_name: str) -> BaseLLM:
+        """Create the appropriate LLM based on provider config."""
+        provider = settings.default_model_provider
+
+        if provider == "deepseek":
+            return OpenAILLM(
+                model_name=model_name,
+                api_key=settings.deepseek_api_key,
+                base_url=settings.deepseek_base_url,
+            )
+        else:
+            return OpenAILLM(model_name=model_name)
 
     def get_model(self, model_name: str | None = None) -> BaseLLM:
         """Get or create a model instance."""
         key = model_name or settings.default_model_name
         if key not in self._models:
-            self._models[key] = OpenAILLM(model_name=key)
+            self._models[key] = self._create_model(key)
         return self._models[key]
 
     def classify_complexity(self, task_description: str) -> TaskComplexity:
         """Heuristic-based task complexity classification."""
         text_lower = task_description.lower()
 
-        # Check for complex indicators first
         for keyword in _COMPLEXITY_HINTS[TaskComplexity.COMPLEX]:
             if keyword in text_lower:
                 return TaskComplexity.COMPLEX
 
-        # Check for simple indicators
         for keyword in _COMPLEXITY_HINTS[TaskComplexity.SIMPLE]:
             if keyword in text_lower:
                 return TaskComplexity.SIMPLE
 
-        # Default to standard
         return TaskComplexity.STANDARD
 
     def route(self, task_description: str) -> BaseLLM:
@@ -65,9 +74,9 @@ class ModelRouter:
         complexity = self.classify_complexity(task_description)
 
         if complexity == TaskComplexity.SIMPLE:
-            model_name = settings.default_model_name  # gpt-4o-mini (cheap)
+            model_name = settings.default_model_name
         elif complexity == TaskComplexity.COMPLEX:
-            model_name = settings.complex_model_name  # gpt-4o (premium)
+            model_name = settings.complex_model_name
         else:
             model_name = settings.default_model_name
 
