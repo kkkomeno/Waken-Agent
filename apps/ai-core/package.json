@@ -1,0 +1,16 @@
+{
+  "name": "@agentos/ai-core",
+  "version": "0.0.1",
+  "private": true,
+  "description": "AgentOS AI Core Service (Python FastAPI) — thin npm shell for turbo integration",
+  "scripts": {
+    "dev": "uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+    "lint": "ruff check .",
+    "typecheck": "mypy app/",
+    "test": "pytest",
+    "clean": "rimraf __pycache__ .pytest_cache"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.0"
+  }
+}

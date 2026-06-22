@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.next/
+.expo/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Docker
+docker/postgres/data/
+docker/redis/data/
+docker/minio/data/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Test
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Turbo
+.turbo/
